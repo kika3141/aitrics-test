@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "branch=$(echo \"$CLAUDE_TOOL_INPUT\" | jq -r '.command // \"\"'); if echo \"$branch\" | grep -qE 'git\\s+branch\\s+-[dD]\\s+(dev|main)(\\s|$)'; then echo 'BLOCKED: dev/main 브랜치는 삭제할 수 없습니다.' >&2; exit 2; fi"
+          }
+        ]
+      }
+    ],
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.worktree_path' | { read -r wt; bash \"$CLAUDE_PROJECT_DIR/scripts/copy-env.sh\" all \"$wt\"; }",
+            "timeout": 30,
+            "statusMessage": ".env 파일 복사 중..."
+          }
+        ]
+      }
+    ]
+  }
+}
