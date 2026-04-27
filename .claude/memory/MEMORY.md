@@ -1,0 +1,1 @@
+- [Rules English](feedback_rules_english.md) — .claude/rules/ files must be written in English
